@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# front-end npm package
+app/dist/
+
+# editor idea hide folder
+**/.idea/
