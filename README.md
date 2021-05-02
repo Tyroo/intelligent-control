@@ -1,2 +1,2 @@
 # intelligent-control
-Intelligent equipment control system
+Intelligent equipment control system.
