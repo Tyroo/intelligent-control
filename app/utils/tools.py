@@ -1,6 +1,7 @@
 from datetime import timedelta, date, datetime
 
 
+# 生成近七天设备使用时长字典数据
 def generate_duration_dict(data: list) -> dict:
     duration = dict()
     if data:
@@ -15,6 +16,7 @@ def generate_duration_dict(data: list) -> dict:
     return duration
 
 
+# 将定时任务视图函数查询后的数据中加入key键，以满足前端之需
 def timer_work_add_key(data: list) -> list:
     for d in data:
         key = d.get('key', d['WorkNumber'])
@@ -22,12 +24,14 @@ def timer_work_add_key(data: list) -> list:
     return data or []
 
 
-def generate_time_rules_list(time_rules):
+# 将前端提交的时间规则表单项转化为cron格式
+def generate_time_rules_list(time_rules: str) -> list:
     time_rules = time_rules[1:-1]
     time_rules = time_rules.split(',')
+    new_time_rules = list()
+
     if len(time_rules) == 7:
         return time_rules
-    new_time_rules = []
     for i in range(7):
         try:
             if time_rules[i] == '*':

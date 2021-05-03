@@ -2,25 +2,16 @@ from django.shortcuts import HttpResponse
 from django.views.decorators.http import require_http_methods
 from app.models import Lighting_Usage_Record, Lighting_Timer_Work_Queues
 from django.db.models import Sum
-from django.db import connection
 from datetime import timedelta, date
 from app.utils import uart
 from app.utils.rewrite import DateEncoder
-from app.utils.tools import generate_duration_dict, timer_work_add_key, generate_time_rules_list
+from app.utils.tools import generate_duration_dict, timer_work_add_key
 from app.utils.schedule import TimerWork
 
 import json
 import time
 
-
-
-'''
-首页重定向API类
-'''
-# class UrlRedirect(View):
-#     def IndexRedirect(self, request):
-#         return redirect('/IntelligentLighting/EquipmentControl')
-
+# 开启定时任务监听线程
 timer_work = TimerWork()
 
 

@@ -10,7 +10,7 @@ class Lighting_Usage_Record(models.Model):
     Duration = models.IntegerField()                    # 使用了多长时间，单位（秒）
     RecordTime = models.DateField(auto_now_add=True)    # 生成这条记录的时刻
 
-
+# 智能照明-定时任务调度
 class Lighting_Timer_Work_Queues(models.Model):
     WorkNumber = models.AutoField(primary_key=True)   # 主键
     WorkContent = models.CharField(max_length=200)    # 任务内容

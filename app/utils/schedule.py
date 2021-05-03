@@ -20,7 +20,7 @@ scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors)
 class TimerWork:
     def __init__(self):
         scheduler.start()   # 启动定时任务进程
-        logging.warning(' Timing task module started successfully !!!')
+        uart.logger.warn('Timing task module started successfully.')
 
 
     def work_func(self, args):
@@ -30,19 +30,19 @@ class TimerWork:
         uart.send('post', 0, f"{ds}10{db}")
 
 
-
     def create_work(self, work_id, rules, args):
         rules = generate_time_rules_list(rules)
         work_id = str(work_id)
-        print(rules, work_id)
         scheduler.add_job(func=self.work_func, trigger='cron',
            jobstore='redis', id=work_id, year=rules[0], month=rules[1], day=rules[2],
            hour=rules[3], minute=rules[4], second=rules[5], day_of_week=rules[6],
            args=(args,), replace_existing=True)
 
+
     def delete_work(self, work_id):
         work_id = str(work_id)
         scheduler.remove_job(job_id=work_id)
+
 
     def editor_work(self, work_id, rules, args):
         rules = generate_time_rules_list(rules)
@@ -53,6 +53,7 @@ class TimerWork:
 
 
 if __name__ == '__main__':
+    # example...
     timer_work = TimerWork()
     timer_work.create_work('001', [2021, 4, 30, 10, 20, 0, 4], {
         'DeviceStatus': 1,

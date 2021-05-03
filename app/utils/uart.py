@@ -7,6 +7,7 @@ from app.models import Lighting_Usage_Record
 import time
 import serial
 import logging
+import asyncio
 
 
 redis_conn = get_redis_connection('default')  # 获取redis连接
@@ -27,11 +28,11 @@ def receive():
         if size:
             recv_byte = connect.read(size)
             print("Receive data：", recv_byte)
-            save_data(recv_byte)
+            asyncio.run(save_data(recv_byte))  # 异步操作数据库，减少主线程阻塞
             continue
         time.sleep(0.4)
 
-def save_data(recv_byte):
+async def save_data(recv_byte):
     # 设备名称
     device_name = 'ILD001'
 
@@ -70,8 +71,8 @@ def save_data(recv_byte):
             open_time = time.strftime('%Y-%m-%d %H:%M:%S', open_time)
             close_time = moment
             # 将数据存入使用记录表
-            Lighting_Usage_Record.objects.create(DeviceName=device_name,
-            OpenTime=open_time, CloseTime=close_time, Duration=duration)
+            await Lighting_Usage_Record.objects.create(DeviceName=device_name, OpenTime=open_time,
+                                                       CloseTime=close_time, Duration=duration)
 
 
 def open_uart():
@@ -90,18 +91,26 @@ def send(method ,explain, value):
         value = f'-{explain}|{value}\n'
     else:
         return
-    print('Send data：', value)
     connect.write(value.encode('utf-8'))
+
+
+logger = logging.getLogger('uart')
+handler = logging.StreamHandler()
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(levelname)s：%(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
 
 
 try:
     connect.open()
-    logging.warning(' UART module started successfully !!!')
+    logger.warn('UART module started successfully.')
     # 创建Uart线程
     uart_thread = Thread(target=receive, daemon=True)
     uart_thread.start()
 except SerialException as e:
-    logging.error(' UART module failed to start !!!')
+    logger.error('UART module failed to start !!!')
 
 
 if __name__ == '__main__':
