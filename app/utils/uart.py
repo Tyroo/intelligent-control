@@ -2,7 +2,8 @@ from serial.serialutil import SerialException
 from threading import Thread
 from django.conf import settings
 from django_redis import get_redis_connection
-from app.models import Lighting_Usage_Record
+from app.utils.tools import create_lighting_usage_record
+from asgiref.sync import sync_to_async
 
 import time
 import serial
@@ -13,7 +14,6 @@ import asyncio
 redis_conn = get_redis_connection('default')  # 获取redis连接
 
 receive_flag = True    # 串口数据接收标志
-
 
 
 connect = serial.Serial()  # 串口连接对象
@@ -28,11 +28,13 @@ def receive():
         if size:
             recv_byte = connect.read(size)
             print("Receive data：", recv_byte)
-            asyncio.run(save_data(recv_byte))  # 异步操作数据库，减少主线程阻塞
+            save_data(recv_byte)
+            # save_data(recv_byte)
             continue
         time.sleep(0.4)
 
-async def save_data(recv_byte):
+
+def save_data(recv_byte):
     # 设备名称
     device_name = 'ILD001'
 
@@ -70,9 +72,10 @@ async def save_data(recv_byte):
 
             open_time = time.strftime('%Y-%m-%d %H:%M:%S', open_time)
             close_time = moment
-            # 将数据存入使用记录表
-            await Lighting_Usage_Record.objects.create(DeviceName=device_name, OpenTime=open_time,
-                                                       CloseTime=close_time, Duration=duration)
+
+            create_dict = {'DeviceName': device_name, 'OpenTime': open_time,
+                           'CloseTime': close_time, 'Duration': duration}
+            create_lighting_usage_record(create_dict)
 
 
 def open_uart():
@@ -84,6 +87,7 @@ def close_uart():
     if connect.is_open:
         connect.close()
 
+
 def send(method ,explain, value):
     if method == 'post':
         value = f'+{explain}|{value}\n'
@@ -91,6 +95,7 @@ def send(method ,explain, value):
         value = f'-{explain}|{value}\n'
     else:
         return
+    print(value)
     connect.write(value.encode('utf-8'))
 
 
@@ -100,7 +105,6 @@ handler.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(levelname)s：%(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
-
 
 
 try:

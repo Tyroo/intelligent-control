@@ -1,5 +1,5 @@
 from datetime import timedelta, date, datetime
-
+from app.models import Lighting_Usage_Record
 
 # 生成近七天设备使用时长字典数据
 def generate_duration_dict(data: list) -> dict:
@@ -41,3 +41,7 @@ def generate_time_rules_list(time_rules: str) -> list:
         except IndexError:
             new_time_rules.insert(i, '*')
     return new_time_rules
+
+
+def create_lighting_usage_record(create_dict: dict):
+    Lighting_Usage_Record.objects.create(**create_dict)

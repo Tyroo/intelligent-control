@@ -56,6 +56,7 @@ def intelligent_light_data_analysis_api(request):
                 .values('RecordTime') \
                 .filter(RecordTime__range=(date_from, date_to), DeviceName='ILD001') \
                 .annotate(sum_duration=Sum('Duration'))
+            print('result：', result)
             data = list(result)
         data = generate_duration_dict(data)
         content['data'] = data
