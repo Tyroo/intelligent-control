@@ -21,10 +21,13 @@ from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('Login/', TemplateView.as_view(template_name="index.html")),
     path('', TemplateView.as_view(template_name="index.html")),
     path('IntelligentLighting/DeviceControl/', TemplateView.as_view(template_name="index.html")),
     path('IntelligentLighting/DataAnalysis/', TemplateView.as_view(template_name="index.html")),
 
+    path('api/LoginApi', views.login_api),
+    path('api/LogoutApi', views.logout_api),
     path('api/IntelligentLighting/DeviceControlApi/', views.intelligent_light_device_control_api),
     path('api/IntelligentLighting/DataAnalysisApi/', views.intelligent_light_data_analysis_api),
     path('api/IntelligentLighting/TimerTaskManageApi/', views.intelligent_light_timer_task_manage_api),

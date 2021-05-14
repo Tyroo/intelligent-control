@@ -1,14 +1,11 @@
 from serial.serialutil import SerialException
 from threading import Thread
-from django.conf import settings
 from django_redis import get_redis_connection
 from app.utils.tools import create_lighting_usage_record
-from asgiref.sync import sync_to_async
 
 import time
 import serial
 import logging
-import asyncio
 
 
 redis_conn = get_redis_connection('default')  # 获取redis连接
@@ -29,7 +26,6 @@ def receive():
             recv_byte = connect.read(size)
             print("Receive data：", recv_byte)
             save_data(recv_byte)
-            # save_data(recv_byte)
             continue
         time.sleep(0.4)
 
@@ -88,14 +84,13 @@ def close_uart():
         connect.close()
 
 
-def send(method ,explain, value):
+def send(method, explain, value):
     if method == 'post':
         value = f'+{explain}|{value}\n'
     elif method == 'get':
         value = f'-{explain}|{value}\n'
     else:
         return
-    print(value)
     connect.write(value.encode('utf-8'))
 
 

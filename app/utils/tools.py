@@ -1,5 +1,9 @@
 from datetime import timedelta, date, datetime
 from app.models import Lighting_Usage_Record
+from django.conf import settings
+
+import jwt
+
 
 # 生成近七天设备使用时长字典数据
 def generate_duration_dict(data: list) -> dict:
@@ -45,3 +49,28 @@ def generate_time_rules_list(time_rules: str) -> list:
 
 def create_lighting_usage_record(create_dict: dict):
     Lighting_Usage_Record.objects.create(**create_dict)
+
+
+def generate_token(username: str) -> jwt:
+    # 构造header
+    headers = {
+        'typ': 'jwt',
+        'alg': 'HS256'
+    }
+    # 构造payload
+    payload = {
+        'usr': username,
+        'exp': datetime.now() + timedelta(days=5)
+    }
+
+    salt = settings.__getattribute__('SECRET_KEY')
+
+    jwt_result = jwt.encode(headers=headers, key=salt, payload=payload, algorithm='HS256')
+    return jwt_result
+
+
+def token_to_username(token: str) -> str:
+    token = jwt.decode(token, settings.__getattribute__('SECRET_KEY'),
+                       algorithms=['HS256'])
+    token_user = token.get('usr')
+    return token_user

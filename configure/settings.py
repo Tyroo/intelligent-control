@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     APP_NAME,
 ]
 
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'app.middleware.request_expansion.HttpPost2HttpOtherMiddleware',
+    'app.middleware.login_verify.LoginVerify',
 ]
 
 ROOT_URLCONF = 'configure.urls'
