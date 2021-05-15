@@ -25,6 +25,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html")),
     path('IntelligentLighting/DeviceControl/', TemplateView.as_view(template_name="index.html")),
     path('IntelligentLighting/DataAnalysis/', TemplateView.as_view(template_name="index.html")),
+    path('IntelligentLighting/TimerTaskManage/', TemplateView.as_view(template_name="index.html")),
 
     path('api/LoginApi', views.login_api),
     path('api/LogoutApi', views.logout_api),

@@ -10,13 +10,14 @@ import jwt
 
 class LoginVerify(MiddlewareMixin):
     # 设置网站访问URL白名单
-    white_list = ['/api/LoginApi']
+    white_list = ['/api/LoginApi', '/']
 
     # 重写父类中的方法，请求之前执行此方法
     def process_request(self, request):
         request_url = request.path_info
+        print('URL:', request_url)
         # 当请求url不属于白名单时，验证token是否存在
-        if request_url not in self.white_list:
+        if request_url not in self.white_list and request_url in '/api/':
             token = request.META.get('HTTP_X_TOKEN')
             if not token:
                 return JsonResponse(status=401,

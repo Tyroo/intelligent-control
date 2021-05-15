@@ -133,3 +133,7 @@ app/dist/
 
 # editor idea hide folder
 **/.idea/
+
+# filter static dist
+app/dist/
+app/static/

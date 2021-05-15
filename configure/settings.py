@@ -24,10 +24,10 @@ APP_NAME = 'app'
 SECRET_KEY = 'ra8hf0yv8t)tp%=8dfesvt-4bgn(p-e@tzs5o%lun8(x@7@p7k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-APPEND_SLASH = False
+ALLOWED_HOSTS = ['*']
+APPEND_SLASH = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -142,8 +142,9 @@ USE_TZ = False   # 为false时，表示纠正时区
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'app/static')
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'app/dist/static'), #设置静态文件存储根路径
+    os.path.join(BASE_DIR, 'app/dist/static'),  # 设置静态文件存储根路径
 )
 # STATICFILES_DIRS = [BASE_DIR / 'app/dist']
