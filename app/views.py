@@ -125,6 +125,7 @@ def intelligent_light_timer_task_manage_api(request):
     if request.method == 'POST':
         form_data = json.loads(request.body.decode('utf-8'))
         delete_key = form_data.get('delete_key')
+
         db = Lighting_Timer_Work_Queues.objects
         # 新增/更新任务
         if not delete_key:

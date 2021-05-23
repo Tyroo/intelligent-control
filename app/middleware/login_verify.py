@@ -1,4 +1,5 @@
 from django.utils.deprecation import MiddlewareMixin
+
 from jwt.exceptions import ExpiredSignatureError, DecodeError, InvalidTokenError
 from app.utils.uart import redis_conn
 from django.http import JsonResponse

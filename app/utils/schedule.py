@@ -41,6 +41,7 @@ class TimerWork:
                           args=(args,), replace_existing=True)
 
 
+
     def delete_work(self, work_id):
         work_id = str(work_id)
         job = self.get_work(job_id=work_id)
@@ -73,6 +74,7 @@ class TimerWork:
     def get_work(self, job_id):
         job = scheduler.get_job(job_id)
         return job
+
 
 if __name__ == '__main__':
     # example...

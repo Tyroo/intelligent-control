@@ -24,6 +24,7 @@ APP_NAME = 'app'
 SECRET_KEY = 'ra8hf0yv8t)tp%=8dfesvt-4bgn(p-e@tzs5o%lun8(x@7@p7k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']

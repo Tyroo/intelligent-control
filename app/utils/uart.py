@@ -38,6 +38,7 @@ def save_data(recv_byte):
     receive_string = bytes.decode(recv_byte)
     receive_list = receive_string.split('+')
     receive_list = list(set(receive_list))
+
     receive_list.remove('')
     receive_list.reverse()
 
