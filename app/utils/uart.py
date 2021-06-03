@@ -38,8 +38,10 @@ def save_data(recv_byte):
     receive_string = bytes.decode(recv_byte)
     receive_list = receive_string.split('+')
     receive_list = list(set(receive_list))
-
-    receive_list.remove('')
+    try:
+        receive_list.remove('')
+    except ValueError:
+        pass
     receive_list.reverse()
 
     for index, value in enumerate(receive_list):
